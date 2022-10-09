@@ -14,6 +14,7 @@
     <title>test</title>
 </head>
 <body>
+<div id="mloader"><img id="loading-image" src="/images/common/loader.gif" alt="Loading..." /></div>
 <script>
     function sessionMsg(){
 

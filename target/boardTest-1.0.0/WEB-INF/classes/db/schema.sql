@@ -45,5 +45,7 @@ CREATE TABLE comtnfile (
     atch_file_id char(20) COLLATE utf8_bin NOT NULL,
     creat_dt datetime NOT NULL,
     use_at char(1) COLLATE utf8_bin DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='전자정부공용(수정금지)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='전자정부공용(수정금지)';
 
+INSERT INTO comtecopseq
+(table_name,next_id)VALUES('FILE_ID', 11);

@@ -4,6 +4,7 @@ import egovframework.account.dto.Account;
 import egovframework.board.dto.BoardDto;
 import egovframework.board.service.BoardService;
 import egovframework.common.CommonMethod;
+import egovframework.config.MailSender;
 import egovframework.fileManager.EgovFileMngService;
 import egovframework.fileManager.FileVO;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -93,9 +94,13 @@ public class BoardController {
         }
 
         //파일업로드 & 게시글insert
-        boardService.insertUpdateBoard(request, vo, fileVO);
-
+        vo.setBoardKey(boardService.insertUpdateBoard(request, vo, fileVO));
         redirectAttributes.addFlashAttribute("vo", vo);
+
+        String url ="http://localhost:8080/";
+        String sender ="email.com";
+        MailSender.sendMail(vo, url, sender);
+
         return "redirect:/board/list.do";
     }
 
@@ -172,10 +177,6 @@ public class BoardController {
         model.addAttribute("vo",vo);
         redirectAttributes.addFlashAttribute("vo", vo);
 
-        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        Map<String, MultipartFile> files = multipartRequest.getFileMap();
-
-
         //게시글의 작성자 세팅
         //Todo : 공통함수화필요
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -188,4 +189,32 @@ public class BoardController {
 
         return "redirect:/board/list.do";
     }
+
+
+    //수정기능
+    @RequestMapping(value = "/delete.do", method = RequestMethod.POST)
+    public String delete(
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes,
+            @ModelAttribute("fileVO") FileVO fileVO,
+            @ModelAttribute("vo") BoardDto vo,
+            ModelMap model) throws Exception {
+
+        BoardDto vo2 = boardService.getBoard(vo);
+        if(!CommonMethod.validateUser(vo2)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("msg","삭제할 권한이 없습니다.");
+            return "redirect:/board/list.do";
+        }
+
+        model.addAttribute("vo",vo);
+        redirectAttributes.addFlashAttribute("vo", vo);
+
+
+
+        boardService.deleteBoard(vo, fileVO);
+
+        return "redirect:/board/list.do";
+    }
+    
 }

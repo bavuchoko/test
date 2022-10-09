@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class BarodServiceImpl implements BoardService{
 
+
     @Autowired
     BoardRepository boardRepository;
 
@@ -32,9 +33,9 @@ public class BarodServiceImpl implements BoardService{
     EgovFileMngService egovFileMngService;
 
     @Override
-    public void insertUpdateBoard(HttpServletRequest request, BoardDto boardDto, FileVO fileVO) throws Exception {
+    public int insertUpdateBoard(HttpServletRequest request, BoardDto boardDto, FileVO fileVO) throws Exception {
         boardDto.setFileId(this.fileUpload(request, fileVO));
-        boardRepository.insertUpdateBoard(boardDto);
+        return boardRepository.insertUpdateBoard(boardDto);
     }
 
     //파일업로드(수정업로드 포함)
@@ -83,5 +84,20 @@ public class BarodServiceImpl implements BoardService{
     @Override
     public int selectBoardListCnt(BoardDto vo) {
         return boardRepository.selectBoardListCnt(vo);
+    }
+
+
+    @Override
+    public void deleteBoard(BoardDto vo, FileVO fileVO) throws Exception {
+        List<FileVO> pastFileList = egovFileMngService.selFileList(fileVO);
+        pastFileList.forEach(e-> {
+            try {
+                egovFileMngService.delFile(e);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+        egovFileMngService.delFileCom(fileVO.getAtchFileId());
+        boardRepository.deleteBoard(vo);
     }
 }

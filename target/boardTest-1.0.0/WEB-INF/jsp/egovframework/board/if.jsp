@@ -31,6 +31,7 @@
     function go_insert() {
         if(validator()){
             if(confirm("등록하시겠습니까?")){
+                $("#mloader").show();
                 document.frm.submit();
             }
         }

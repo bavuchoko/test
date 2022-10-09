@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public class BoardRepository extends EgovAbstractDAO {
-    public void insertUpdateBoard(BoardDto boardDto) {
-        insert("board.insertUpdateBoard", boardDto);
+    public int insertUpdateBoard(BoardDto boardDto) {
+        return (int)insert("board.insertUpdateBoard", boardDto);
     }
 
     public BoardDto selectBoard(BoardDto boardDto) {
@@ -23,5 +23,9 @@ public class BoardRepository extends EgovAbstractDAO {
 
     public int selectBoardListCnt(BoardDto vo) {
         return (int)select("board.selectBoardListCnt", vo);
+    }
+
+    public void deleteBoard(BoardDto vo) {
+        delete("board.deleteBoard", vo);
     }
 }

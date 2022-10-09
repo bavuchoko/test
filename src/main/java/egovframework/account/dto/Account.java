@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,9 @@ import java.util.stream.Collectors;
 public class Account extends DefaultVO implements UserDetails{
 
 
+    @Email
     private String username;
+
     private String userNickname;
     private String password;
     private ArrayList<AccountRole> roles;

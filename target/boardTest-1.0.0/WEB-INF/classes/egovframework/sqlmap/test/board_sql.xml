@@ -57,4 +57,9 @@
 		FROM board
 	</select>
 
+	<delete id="board.deleteBoard" parameterClass="board">
+		/* board.deleteBoard */
+		DELETE FROM board WHERE boardKey = #boardKey#
+	</delete>
+
 </sqlMap>

@@ -9,11 +9,13 @@ import java.util.List;
 public interface BoardService {
 
 
-    void insertUpdateBoard(HttpServletRequest request, BoardDto boardDto, FileVO fileVO) throws Exception;
+    int insertUpdateBoard(HttpServletRequest request, BoardDto boardDto, FileVO fileVO) throws Exception;
 
     BoardDto getBoard(BoardDto boardDto);
 
     List selectBoardList(BoardDto boardDto);
 
     int selectBoardListCnt(BoardDto vo);
+
+    void deleteBoard(BoardDto vo, FileVO fileVO) throws Exception;
 }

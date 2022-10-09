@@ -26,12 +26,19 @@
     function go_update(boardKey) {
         location.href = "/board/update.do?boardKey="+boardKey;
     }
+    function go_delete(boardKey) {
+        document.frm.boardKey =boardKey;
+        document.frm.action = "/board/delete.do";
+        document.frm.submit();
+
+    }
 
 </script>
 
-    <form id="frm" name="frm" method="GET" action="/board/view.do" >
+    <form id="frm" name="frm" method="POST" action="/board/view.do" >
         <input type="hidden" id="pageIndex" name="pageIndex" value="${vo.pageIndex}">
         <input type="hidden" id="boardKey" name="boardKey" value="${vo.boardKey}">
+        <input type="hidden" name="atchFileId" value="${fileList[0].atchFileId}" />
         <h2>게시글 보기</h2>
 
 
@@ -67,6 +74,7 @@
             <a class="btn" onclick="go_back()">목록으로</a>
             <c:if test="${hasAuthority}">
                 <a class="btn" onclick="go_update(${vo.boardKey})">수정</a>
+                <a class="btn" onclick="go_delete(${vo.boardKey})">삭제</a>
             </c:if>
         </div>
     </form>

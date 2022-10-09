@@ -20,7 +20,7 @@
             }
         }
     }
-
+var isMail =false;
     function validator() {
         with (document.acfrm){
             if (username.value == ""){
@@ -48,9 +48,29 @@
                 passwordConfirm.focus();
                 return false;
             }
+            if(!isMail){
+                alert("이메일 형식으로 입력하세요.");
+                return false;
+            }
         }
         return true;
     }
+
+    function verifyEmail() {
+        // 이메일 검증 스크립트 작성
+        var emailVal = $("#username").val();
+
+        var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        // 검증에 사용할 정규식 변수 regExp에 저장
+
+        if (emailVal.match(regExp) != null) {
+            isMail= true;
+        }
+        else {
+            alert('이메일 형식으로 입력하세요');
+            isMail=false;
+        }
+    };
 </script>
 
 <h2>가입페이지</h2>
@@ -58,7 +78,7 @@
 <div id="body_container">
 
     <form id="acfrm" name="acfrm" action="/account/create.do" >
-        <input type="text" class="logininput" name="username" placeholder="아이디">
+        <input type="text" class="logininput" id="username" name="username" placeholder="아이디" onblur="verifyEmail()">
         <input type="text" class="logininput" name="userNickname" placeholder="사용자이름">
         <input type="password" class="logininput" name="password" placeholder="비밀번호">
         <input type="password" class="logininput" name="passwordConfirm" placeholder="비밀번호확인">
