@@ -38,9 +38,9 @@ public class EgovProperties {
 
 	//public static final String RELATIVE_PATH_PREFIX = EgovProperties.class.getResource("").getPath()	+ FILE_SEPARATOR+ ".." + FILE_SEPARATOR  + ".." + FILE_SEPARATOR;
 
-	public static final String RELATIVE_PATH_PREFIX = EgovProperties.class.getResource("").getPath().substring(0, EgovProperties.class.getResource("").getPath().lastIndexOf("com"));
+	public static final String RELATIVE_PATH_PREFIX = EgovProperties.class.getResource("").getPath().substring(0, EgovProperties.class.getResource("").getPath().lastIndexOf("fileManager"));
 
-	public static final String GLOBALS_PROPERTIES_FILE = RELATIVE_PATH_PREFIX + "egovProps" + FILE_SEPARATOR + "globals.properties";
+	public static final String GLOBALS_PROPERTIES_FILE = RELATIVE_PATH_PREFIX + "egovProps" + FILE_SEPARATOR + "cms.properties";
 
 	/**
 	 * 인자로 주어진 문자열을 Key값으로 하는 상대경로 프로퍼티 값을 절대경로로 반환한다(Globals.java 전용)
@@ -51,7 +51,9 @@ public class EgovProperties {
 		String value = "";
 		
 		LOGGER.debug("getPathProperty : {} = {}", GLOBALS_PROPERTIES_FILE, keyName);
-		
+		String aa = GLOBALS_PROPERTIES_FILE;
+		String bb = RELATIVE_PATH_PREFIX;
+		String cc = EgovProperties.class.getResource("").getPath();
 		FileInputStream fis = null;
 		try {
 			Properties props = new Properties();
@@ -81,7 +83,9 @@ public class EgovProperties {
 	 */
 	public static String getProperty(String keyName) {
 		String value = "";
-		
+		String aa = GLOBALS_PROPERTIES_FILE;
+		String bb = RELATIVE_PATH_PREFIX;
+		String cc = EgovProperties.class.getResource("").getPath();
 		LOGGER.debug("getProperty : {} = {}", GLOBALS_PROPERTIES_FILE, keyName);
 		
 		FileInputStream fis = null;

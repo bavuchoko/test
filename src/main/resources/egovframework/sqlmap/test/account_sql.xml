@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<typeAlias alias="account" type="egovframework.account.dto.Account" />
+	<typeAlias alias="role" type="egovframework.account.dto.AccountRole" />
+
+
+	<resultMap id="setAccount" class="account">
+		<result property="userId" column="userId" />
+		<result property="username" column="username" />
+		<result property="userNickname" column="userNickname" />
+		<result property="password" column="password" />
+		<result property="roles" column="username" javaType="java.util.List" select="account.roleList"/>
+	</resultMap>
+
+	<select id="account.roleList" resultClass="role">
+		/* account.roleList */
+		SELECT
+			role
+		FROM account_role
+		WHERE username =#username#
+	</select>
+
+	<select id="account.findByUsername" parameterClass="string" resultMap="setAccount">
+		/* account.findByUsername */
+		SELECT
+			userId,
+			username,
+			userNickname,
+			password
+		FROM account
+		WHERE username = #username#
+	</select>
+
+
+	<insert id="account.createAccount" parameterClass="account">
+		/* account.createAccount */
+		INSERT INTO account
+		(username,userNickname, password)
+		VALUES
+		(
+			#username#,
+			#userNickname#,
+			#password#
+		)
+	</insert>
+
+
+	<insert id="account.insertRole" parameterClass="account">
+		/* account.createAccount */
+		INSERT INTO account_role
+		(username,role)
+		<iterate prepend="VALUES" property="roles" conjunction=",">
+			(
+			#username#,
+			#roles[].role#
+			)
+		</iterate>
+	</insert>
+
+</sqlMap>

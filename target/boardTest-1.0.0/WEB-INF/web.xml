@@ -26,7 +26,15 @@
 		<filter-name>HTMLTagFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-    
+    <filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:egovframework/spring/context-*.xml</param-value>
@@ -59,17 +67,21 @@
 		<auth-method>BASIC</auth-method>
 	</login-config>
     
-	<error-page>
-		<exception-type>java.lang.Throwable</exception-type>
-		<location>/common/error.jsp</location>
-	</error-page>
+<!--	<error-page>-->
+<!--		<exception-type>java.lang.Throwable</exception-type>-->
+<!--		<location>/common/error.jsp</location>-->
+<!--	</error-page>-->
 	<error-page>
 		<error-code>404</error-code>
 		<location>/common/error.jsp</location>
 	</error-page>
 	<error-page>
-		<error-code>500</error-code>
-		<location>/common/error.jsp</location>
+		<error-code>403</error-code>
+		<location>/common/error2.jsp</location>
 	</error-page>
+<!--	<error-page>-->
+<!--		<error-code>500</error-code>-->
+<!--		<location>/common/error.jsp</location>-->
+<!--	</error-page>-->
     
 </web-app>

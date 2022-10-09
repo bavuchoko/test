@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<typeAlias alias="board" type="egovframework.board.dto.BoardDto" />
+
+	<insert id="board.insertUpdateBoard" parameterClass="board">
+		<selectKey keyProperty="tempKey">
+			/* boar pk */
+			SELECT IFNULL(MAX(boardKey), 0) + 1 FROM board
+		</selectKey>
+		/* board.insertUpdateBoard */
+		INSERT INTO board
+		(boardKey, title, body, userId, wdate, fileId)
+		VALUES
+		(
+			IF(#boardKey#=0, #tempKey#, #boardKey#),
+			#title#,
+			#body#,
+			#userId#,
+			NOW(),
+			#fileId#
+		)
+		ON DUPLICATE key update
+			title 	= #title#,
+			body 	= #body#,
+			userId 	= #userId#,
+			fileId 	= #fileId#
+	</insert>
+
+	<select id="board.selectBoard" parameterClass="board" resultClass="board">
+		/* board.selectBoard */
+		SELECT
+			b.*,
+			a.userNickname
+		FROM board b
+		LEFT JOIN account a ON a.userId =b.userId
+		WHERE boardKey = #boardKey#
+	</select>
+
+	<select id="board.selectBoardList" parameterClass="board" resultClass="board">
+		/* board.selectBoardList */
+		SELECT
+			b.*,
+			a.userNickname
+		FROM board b
+		LEFT JOIN account a ON a.userId =b.userId
+		ORDER BY b.boardKey DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+
+	<select id="board.selectBoardListCnt" parameterClass="board" resultClass="int">
+		/* board.selectBoardList */
+		SELECT
+			COUNT(boardKey)
+		FROM board
+	</select>
+
+</sqlMap>
