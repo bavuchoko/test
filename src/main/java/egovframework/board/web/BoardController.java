@@ -35,6 +35,8 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    MailSender mailSender;
 
     @Autowired
     EgovFileMngService egovFileMngService;
@@ -88,10 +90,9 @@ public class BoardController {
         //게시글의 작성자 세팅
         //Todo : 공통함수화필요
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!"anonymousUser".equals(authentication.getPrincipal())){
-            Account account = (Account)authentication.getPrincipal();
-            vo.setUserId(account.getUserId());
-        }
+        Account account = (Account)authentication.getPrincipal();
+        vo.setUserId(account.getUserId());
+
 
         //파일업로드 & 게시글insert
         vo.setBoardKey(boardService.insertUpdateBoard(request, vo, fileVO));
@@ -99,7 +100,8 @@ public class BoardController {
 
         String url ="http://localhost:8080/";
         String sender ="email.com";
-        MailSender.sendMail(vo, url, sender);
+
+        mailSender.sendMail(vo, url, sender, account);
 
         return "redirect:/board/list.do";
     }
