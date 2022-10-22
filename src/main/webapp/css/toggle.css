@@ -1,0 +1,44 @@
+.toggleSwitch {
+    margin-top: 10px;
+    width: 2.6rem;
+    float: left;
+    height: 1.4rem;
+    display: block;
+    position: relative;
+    border-radius: 2rem;
+    background-color: #f03d3d;
+    box-shadow: 0 0 1rem 3px rgba(0 0 0 / 15%);
+    cursor: pointer;
+}
+
+.toggleSwitch .toggleButton {
+    width: 1.2rem;
+    height: 1.2rem;
+    position: absolute;
+    top: 50%;
+    left: calc(100% - 1.3rem);
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* 체크박스가 체크될 시 변경되는 요소 */
+#toggle:checked ~ .toggleSwitch {
+    background: #4ebb0e;
+}
+
+#toggle:checked ~ .toggleSwitch .toggleButton {
+    /* 100% -> 끝위치, 2.8rem -> 버튼 크기 */
+    left: .2rem;
+    background: #fff;
+}
+
+.toggleSwitch, .toggleButton {
+    transition: all 0.1s ease-in;
+}
+
+.bottom_menu > span{
+    margin-top: 10px;
+    display: inline-block;
+    margin-left: 10px;
+}

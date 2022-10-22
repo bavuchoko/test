@@ -44,6 +44,7 @@
 
         <div id="tbl_main">
            제목<p>${vo.title}</p>
+
             <pre>${vo.body}</pre>
         </div>
 
@@ -55,6 +56,8 @@
                             <c:out value="${i.index + 1}" />
                         </span>
                         <span class="file-name">
+                            <img style='width: 30px; height:30px;' id='preImage_${i.index}' src='<c:url value="/cmm/fms/getImage.do"/>?atchFileId=${fileList[0].atchFileId}+&fileSn=${file.fileSn}' onclick='viewFile(this.src)' />
+
                             <a href="javascript:fn_egov_downFile('${file.atchFileId}','${file.fileSn}')">
                                 <c:out value="${file.orignlFileNm}"/>&nbsp;[<c:out value="${file.fileMg}"/>&nbsp;byte]
                             </a>

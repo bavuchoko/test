@@ -19,7 +19,7 @@ import java.util.Properties;
 public class MailSender {
 
     @Async("mailExecutor")
-    public void sendMail(BoardDto boardDto, String url, String sender, Account account) throws IOException {
+    public void sendMail(BoardDto boardDto, String url, String sender, String[] mailTo ) throws IOException {
 
         //제목
         String subject="등록 되었습니다 > " + boardDto.getTitle();
@@ -47,20 +47,22 @@ public class MailSender {
         p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         p.put("mail.smtp.socketFactory.fallback", "false");
 
-        try{
-            Authenticator auth =new Gmail();
-            Session ses =Session.getInstance(p, auth);
-            ses.setDebug(true);
-            MimeMessage msg =new MimeMessage(ses);
-            msg.setSubject(subject);
-            Address fromAddr =new InternetAddress(sender);
-            msg.setFrom(fromAddr);
-            Address toAddr =new InternetAddress(account.getUsername());
-            msg.addRecipient(Message.RecipientType.TO, toAddr);
-            msg.setContent(content, "text/html;charset=UTF-8");
 
+        for (String mail : mailTo) {
+            try{
+                Authenticator auth =new Gmail();
+                Session ses =Session.getInstance(p, auth);
+                ses.setDebug(true);
+                MimeMessage msg =new MimeMessage(ses);
+                msg.setSubject(subject);
+                Address fromAddr =new InternetAddress(sender);
+                msg.setFrom(fromAddr);
+                Address toAddr =new InternetAddress(mail);
+                msg.addRecipient(Message.RecipientType.TO, toAddr);
+                msg.setContent(content, "text/html;charset=UTF-8");
+                Transport.send(msg);
+            }catch(Exception e){e.printStackTrace();}
+        }
 
-            Transport.send(msg);
-        }catch(Exception e){e.printStackTrace();}
     }
 }

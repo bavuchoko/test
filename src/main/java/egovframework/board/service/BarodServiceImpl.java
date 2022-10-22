@@ -40,22 +40,29 @@ public class BarodServiceImpl implements BoardService{
 
     //파일업로드(수정업로드 포함)
     private String fileUpload(HttpServletRequest request, FileVO fileVO) throws Exception {
+        //fileVO => 기존에 업로드 되었던 파일 리스트
         int sn= 0;
         if(StringUtils.hasText(fileVO.getAtchFileId())){
+            //기존의 파일아이디와 sn 목록을 조회
             List<FileVO> pastFileList = egovFileMngService.selFileList(fileVO);
+            //뷰에서 넘겨준 기존에 있던 파일리스트와 비교하여
             List noMatchList= pastFileList.stream().filter(e->
                  Arrays.stream(fileVO.getFileSn().split(","))
+                         //뷰에서 넘어온 파일리스트의 sn과 비교해 기존리스트에 있는 sn 이 비어있을 경우
                          .noneMatch(Predicate.isEqual(e.getFileSn()))).collect(Collectors.toList());
             noMatchList.forEach(e-> {
                 try {
+                    //그 sn 에 해당하는 파일의 db정보를 삭제
                     egovFileMngService.delFile((FileVO)e);
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
             });
+            //추가될 파일의 sn을 새로 할당
             sn = Integer.parseInt(fileVO.getFileSn().split(",")[fileVO.getFileSn().split(",").length-1])+1;
         }
 
+        //files => 새롭게 추가된 파일
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> files = multipartRequest.getFileMap();
         List<FileVO> result = null;

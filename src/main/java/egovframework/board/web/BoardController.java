@@ -4,6 +4,7 @@ import egovframework.account.dto.Account;
 import egovframework.board.dto.BoardDto;
 import egovframework.board.service.BoardService;
 import egovframework.common.CommonMethod;
+import egovframework.common.EgovStringUtil;
 import egovframework.config.MailSender;
 import egovframework.fileManager.EgovFileMngService;
 import egovframework.fileManager.FileVO;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -98,10 +100,13 @@ public class BoardController {
         vo.setBoardKey(boardService.insertUpdateBoard(request, vo, fileVO));
         redirectAttributes.addFlashAttribute("vo", vo);
 
-        String url ="http://localhost:8080/";
-        String sender ="email.com";
 
-        mailSender.sendMail(vo, url, sender, account);
+        if(vo.isMailSend()){
+            String url ="http://localhost:8080/";
+            String sender ="test.com";
+            String[] mailList = EgovStringUtil.split(vo.getMailList(),",");
+            mailSender.sendMail(vo, url, sender, mailList);
+        }
 
         return "redirect:/board/list.do";
     }

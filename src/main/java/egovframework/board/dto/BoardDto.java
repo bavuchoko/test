@@ -20,4 +20,6 @@ public class BoardDto extends DefaultVO {
     public String userName;
     public String userNickname;
     public String wdate ;
+    public String mailList;
+    public boolean mailSend =false;
 }

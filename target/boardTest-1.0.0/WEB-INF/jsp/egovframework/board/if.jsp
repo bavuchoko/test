@@ -10,23 +10,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/jsp/egovframework/script.jsp" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<link href="/css/toggle.css" rel="stylesheet"/>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
+    var validate = true;
 
-    function  test(obj){
 
-        var idx = obj.dataset.index;
 
-        var filename ="";
-
-        if(window.FileReader){
-            filename  = obj.files[0].name;
-        }
-        else {  // old IE
-            filename = $(this).val().split('/').pop().split('\\').pop();  // 파일명만 추출
-        }
-        $("#file-name"+idx).val(filename)
-    };
 
     function go_insert() {
         if(validator()){
@@ -62,15 +52,17 @@
         innerStr += "	<p id='fr_"+fileIndex+"' class='file_tr'>";
         innerStr += "		<span>";
         innerStr += "			<a class='del_x' onclick='delRow(this);'>X</a>";
-        innerStr += "		</spand>";
+        innerStr += "		</span>";
         // 파일명
-        innerStr += "		<spand>";
+        innerStr += "		<span>";
+        innerStr += "		<img style='width: 30px; height:30px;' id='preImage_"+fileIndex+"' src='/images/common/question-sign.png' onclick='viewFile(this.src)' />";
+
         innerStr +=	"			<input type='hidden' id='fileKey' name='fileKey' value='0' />";
         innerStr +="			<input type='hidden' id='fileIndex' name='fileIndex' value='"+fileIndex+"' />";
-        innerStr +="			<input type='file' id='filename_"+fileIndex+"' name='filename"+fileIndex+"' class='upload-hidden'  data-index='"+fileIndex+"' style='width:300px' onchange='test(this)'/>";
+        innerStr +="			<input type='file' id='filename_"+fileIndex+"' name='filename"+fileIndex+"' class='upload-hidden'  data-index='"+fileIndex+"' style='width:300px' onchange='uploadFile(this)'/>";
         innerStr += "           <input class='file-name' id='file-name"+fileIndex+"' value='파일선택' disabled='disabled'>";
         innerStr += "		<label for='filename_"+fileIndex+"' >파일선택</label>";
-        innerStr += "		</spand>";
+        innerStr += "		</span>";
 
         innerStr += "	</p>";
 
@@ -92,6 +84,26 @@
         location.href = "/board/list.do";
     }
 
+    function addMailAddred() {
+        var html="";
+        html += "<input type='text' id='mailList' class='mailList' name='mailList' placeholder='공백없이 , 로 이메일 추가'>";
+        $(html).appendTo(".bottom_menu");
+    }
+
+    function removeMailAddred() {
+        $("#mailList").remove();
+    }
+
+    function toggleMail() {
+        if(!document.getElementById("toggle").checked){
+            $(".toggle_msg").text("메일발송 ON")
+            addMailAddred();
+
+        }else {
+            $(".toggle_msg").text("메일발송 OFF")
+            removeMailAddred();
+        }
+    }
 </script>
 
     <form id="frm" name="frm" method="POST" action="/board/create.do"  enctype="multipart/form-data">
@@ -114,11 +126,20 @@
             <a class="file_btn del" onclick="delRow();"> - 제거</a>
             <a class="file_btn add" onclick="addFile();"> + 추가</a>
         </div>
+        <div class="toggle-button-cover">
+        <div class="button-cover">
 
+        </div>
         <div class="bottom_menu">
+            <span class="toggle_msg">메일발송 OFF</span>
+            <input type="checkbox" id="toggle" hidden name="mailSend">
+            <label for="toggle" class="toggleSwitch" onclick="toggleMail()">
+                <span class="toggleButton"></span>
+            </label>
             <a class="btn" onclick="go_back()">목록으로</a>
             <a class="btn" onclick="go_insert()">저장</a>
         </div>
+
     </form>
 </body>
 </html>

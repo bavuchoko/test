@@ -70,7 +70,7 @@
                 <tbody>
 
                 <c:forEach var="list" items="${list}" varStatus="i">
-                    <tr onclick="goView(${list.boardKey})">
+                    <tr onclick="goView(${list.boardKey})" >
                         <td>${paginationInfo.totalRecordCount+1 - (i.count+(vo.pageIndex-1)*10)}</td>
                         <td>${list.title}</td>
                         <td>${list.userNickname}</td>

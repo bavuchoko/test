@@ -13,20 +13,6 @@
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 
-    function  test(obj){
-
-        var idx = obj.dataset.index;
-
-        var filename ="";
-
-        if(window.FileReader){
-            filename  = obj.files[0].name;
-        }
-        else {  // old IE
-            filename = $(this).val().split('/').pop().split('\\').pop();  // 파일명만 추출
-        }
-        $("#file-name"+idx).val(filename)
-    };
 
     function go_update() {
         if(validator()){
@@ -61,15 +47,17 @@
         innerStr += "	<p id='fr_"+fileIndex+"' class='file_tr'>";
         innerStr += "		<span>";
         innerStr += "			<a class='del_x' onclick='delRow(this);'>X</a>";
-        innerStr += "		</spand>";
+        innerStr += "		</span>";
         // 파일명
-        innerStr += "		<spand>";
+        innerStr += "		<span>";
+        innerStr += "		<img style='width: 30px; height:30px;' id='preImage_"+fileIndex+"' src='/images/common/question-sign.png' onclick='viewFile(this.src)' />";
+
         innerStr +=	"			<input type='hidden' id='fileKey' name='fileKey' value='0' />";
         innerStr +="			<input type='hidden' id='fileIndex' name='fileIndex' value='"+fileIndex+"' />";
-        innerStr +="			<input type='file' id='filename_"+fileIndex+"' name='filename"+fileIndex+"' class='upload-hidden'  data-index='"+fileIndex+"' style='width:300px' onchange='test(this)'/>";
+        innerStr +="			<input type='file' id='filename_"+fileIndex+"' name='filename"+fileIndex+"' class='upload-hidden'  data-index='"+fileIndex+"' style='width:300px' onchange='uploadFile(this)'/>";
         innerStr += "           <input class='file-name' id='file-name"+fileIndex+"' value='파일선택' disabled='disabled'>";
         innerStr += "		<label for='filename_"+fileIndex+"' >파일선택</label>";
-        innerStr += "		</spand>";
+        innerStr += "		</span>";
 
         innerStr += "	</p>";
 
@@ -110,17 +98,19 @@
 
                 <c:forEach var="file" items="${fileList}" varStatus="i">
                     <p id='fr_${i.index}' class='file_tr'>
-                    	<spand>
+                    	<span>
                             <a class='del_x' onclick='delRow(this);'>X</a>
-                        </spand>
-                    	<spand>
+                        </span>
+                    	<span>
+                            <img style='width: 30px; height:30px;' id='preImage_${i.index}' src='<c:url value="/cmm/fms/getImage.do"/>?atchFileId=${fileList[0].atchFileId}+&fileSn=${file.fileSn}' onclick='viewFile(this.src)' />
+
                             <input type='hidden' id='fileKey' name='fileKey' value='0' />
                             <input type='hidden' id='fileIndex' name='fileIndex' value='${i.index}' />
-                            <input type='file' id='filename_${i.index}' name='filename${i.index}' class='upload-hidden'  data-index='${i.index}' style='width:300px' onchange='test(this)'/>
-                            <input type="hidden" name="fileSn" value="${file.fileSn}" />
+                            <input type='file' id='filename_${i.index}' name='filename${i.index}' class='upload-hidden'  data-index='${i.index}' style='width:300px' onchange='uploadFile(this,${i.index})'/>
+                            <input type="hidden" name="fileSn" id="fileSn_${i.index}" value="${file.fileSn}" />
                             <input class='file-name' id='file-name${i.index}' value='${file.orignlFileNm}' disabled='disabled'>
                         	<label for='filename_${i.index}' >파일선택</label>
-                        </spand>
+                        </span>
                     </p>
                 </c:forEach>
                 <c:if test="${empty fileList}">
