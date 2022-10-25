@@ -102,7 +102,12 @@
                             <a class='del_x' onclick='delRow(this);'>X</a>
                         </span>
                     	<span>
-                            <img style='width: 30px; height:30px;' id='preImage_${i.index}' src='<c:url value="/cmm/fms/getImage.do"/>?atchFileId=${fileList[0].atchFileId}+&fileSn=${file.fileSn}' onclick='viewFile(this.src)' />
+                            <c:if test="${file.fileExtsn ne 'pdf'}">
+                                <img style='width: 30px; height:30px;' id='preImage_${i.index}' src='<c:url value="/cmm/fms/getImage.do"/>?atchFileId=${fileList[0].atchFileId}+&fileSn=${file.fileSn}' onclick="viewFile(this.src)" />
+                            </c:if>
+                            <c:if test="${file.fileExtsn eq 'pdf'}">
+                                <img style='width: 30px; height:30px;' id='preImage_${i.index}' src='/images/common/pdf.png' onclick="viewFileViewPage('${file.atchFileId}','${file.fileExtsn}')" />
+                            </c:if>
 
                             <input type='hidden' id='fileKey' name='fileKey' value='0' />
                             <input type='hidden' id='fileIndex' name='fileIndex' value='${i.index}' />

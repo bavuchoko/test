@@ -55,7 +55,7 @@
         innerStr += "		</span>";
         // 파일명
         innerStr += "		<span>";
-        innerStr += "		<img style='width: 30px; height:30px;' id='preImage_"+fileIndex+"' src='/images/common/question-sign.png' onclick='viewFile(this.src)' />";
+        innerStr += "		<img style='width: 30px; height:30px;' id='preImage_"+fileIndex+"' data-format='' src='/images/common/question-sign.png' onclick='viewFile(this.src, this.dataset.format)' />";
 
         innerStr +=	"			<input type='hidden' id='fileKey' name='fileKey' value='0' />";
         innerStr +="			<input type='hidden' id='fileIndex' name='fileIndex' value='"+fileIndex+"' />";
@@ -139,7 +139,6 @@
             <a class="btn" onclick="go_back()">목록으로</a>
             <a class="btn" onclick="go_insert()">저장</a>
         </div>
-
     </form>
 </body>
 </html>

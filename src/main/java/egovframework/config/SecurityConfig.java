@@ -39,12 +39,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                //pdf팝업 cors
+                .headers().frameOptions().sameOrigin();
+
+        http
             //접근권한
             .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADIM")
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/board/create.do").hasAnyRole("USER","ADMIN")
                 .anyRequest().permitAll()
+
             //로그인
             .and()
                 .formLogin()
@@ -59,6 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/board/list.do")
                 .invalidateHttpSession(true)
+
+
         ;
     }
     @Override

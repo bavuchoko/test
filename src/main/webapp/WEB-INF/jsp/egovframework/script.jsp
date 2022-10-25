@@ -15,12 +15,15 @@
 </head>
 <body>
 <div id="mloader"><img id="loading-image" src="/images/common/loader.gif" alt="Loading..." /></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 <script>
 
 
     //파일선택
     function  uploadFile(obj,fdx){
         validate = true;
+        isPdf = false;
         var maxSize = 10 * 1024 * 1024;
         var fileSize = obj.files[0].size;
         var idx = obj.dataset.index;
@@ -31,7 +34,7 @@
             return false;
         } else {
             fileExtCheck(obj)
-            if(validate) readURL(obj, idx);
+            if(validate) readURL(obj, idx, isPdf);
         }
         var filename ="";
         if(window.FileReader){
@@ -49,8 +52,12 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                console.log(e)
-                $("#preImage_"+idx).attr('src', e.target.result);
+                if(!isPdf){
+                    $("#preImage_"+idx).attr('src', e.target.result);
+                }else{
+                    $("#preImage_"+idx).attr('src', '/images/common/pdf.png');
+                }
+                    $("#preImage_"+idx).attr('data-format', isPdf);
             }
             reader.readAsDataURL(input.files[0]);
         }
@@ -58,9 +65,11 @@
 
     //확장자 체크
     function fileExtCheck(obj){
+
         var docName = obj.value.substring(obj.value.lastIndexOf("\\")+1);
         var prefixList = ['exe','cgi', 'pl', 'plx', 'html', 'htm', 'xhtml', 'php', 'php3', 'php4', 'asp', 'asa', 'jsp', 'jsa', 'java', 'htaccess'];
         var fielExt = getFileExtension(docName);
+        isPdf = getFileExtension(docName)== 'pdf' ? true : false ;
         for (var i = 0; i < prefixList.length; i++){
             if (fielExt == prefixList[i]) {
                 validate = false;
@@ -87,7 +96,16 @@
 
 
     //파일 뷰팝업 이미지 사이즈만큼
-    function viewFile(url){
+    function viewFile(url, isPdf){
+        if(isPdf =="true"){
+            view_img(url)
+        }else {
+            view_img(url) ;
+        }
+    }
+
+    //이미지
+    function view_img(url){
         var img=new Image();
         img.src=url;
         img.onload = function (){
@@ -99,5 +117,24 @@
             OpenWindow.document.write("<style>body{margin:0px;}</style><img src='"+url+"' width='"+win_width+"'>");
         }
     }
+    function viewFileViewPage(id, extension){
+        var url = "";
+
+        if(extension != "pdf"){
+            url = "<c:url value='/cmm/fms/getImage.do'/>?atchFileId="+id+"&fileSn=0"
+            view_img(url);
+            console.log(url)
+        }else{
+            url = "<c:url value='/cmm/fms/getPdf.do'/>?atchFileId="+id+"&fileSn=0"
+            viewPdfFile(url);
+        }
+    }
+
+    //파일 뷰팝업 이미지 사이즈만큼
+    function viewPdfFile(url){
+        var OpenWindow=window.open('','_blank', 'menubars=no, scrollbars=auto');
+        OpenWindow.document.write("<style>body{margin:0px;}</style><iframe width='100%' height='100%' src='"+url+"'></iframe>");
+    }
+
 
 </script>
