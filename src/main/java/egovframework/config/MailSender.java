@@ -22,19 +22,19 @@ public class MailSender {
     public void sendMail(BoardDto boardDto, String url, String sender, String[] mailTo ) throws IOException {
 
         //제목
-        String subject="등록 되었습니다 > " + boardDto.getTitle();
+        String subject="게시물이 등록 되었습니다 > " + boardDto.getTitle();
         String content ="<!DOCTYPE html>";
         content +="<html>";
         content +="<body>";
-        content +="<h1>등록하신 글의 링크주소 입니다.</h1>";
-        content +="<a style='text-decoration: none; color:black;' href='"+url+"/board/view.do?boardKey="+ boardDto.getBoardKey()+"'> ";
-        content +="<p style='font-size: 20px; margin:10px;'> &#9758; Link</p>";
-        content += "</a>";
-        content +="<div style='border: 1px solid #DDD; padding: 5px;'>";
-        content +="<pre>";
+        content +="<h3>다음의 내용으로 등록되었습니다</h3>";
+        content +="<h4>제목 : "+ boardDto.getTitle() +"</h4>";
+        content +="<h4>본문 : </h4>";
+        content +="<div style='border: 1px solid #DDD; padding: 5px;'><pre>";
         content += boardDto.getBody();
-        content +="</pre>";
-        content += "</div></body></html>";
+        content +="</pre></div>";
+        content +="<a href='"+url+"/board/view.do?boardKey="+ boardDto.getBoardKey()+"'> ";
+        content +="<p style='font-size: 14px; margin:10px;'> 이 페이지로 가기 </p>";
+        content +="</a></body></html>";
 
         Properties p =new Properties();
         p.put("mail.smtp.user", sender);
